@@ -12,6 +12,7 @@ void increment(int* j, int i)
     //        value of the integer j points to by
     //        the amount i
 
+    *j += i;
 }
 
 
@@ -30,7 +31,7 @@ void pointerFunctionInt()
 
     //  TODO (task 3): Using the increment function and the pointer j,
     //        increment i by 1, from 149 to 150
-
+    increment(j, 1);
 
     //printing the value stored at the pointer given to
     //the function increment after the funtion runs
@@ -46,7 +47,7 @@ void pointerFunctionRect()
     //  TODO (task 8): Assign rec (a pointer to a rectangle object)
     //        to a new rectangle object
 
-
+    rec = new Rectangle();
 
     int w = 10;
     int h = 10;
@@ -58,6 +59,7 @@ void pointerFunctionRect()
     //        If rec were an object member functions would
     //        be accessed by a .
 
+    rec->set_values(10,10);
 
     std::cout << "before height increment = " << rec->area() << std::endl;
 
@@ -65,6 +67,7 @@ void pointerFunctionRect()
     //  TODO (task 10): Using the increment function and the pointer rec->height,
     //        increment rec->height by 5, from 10 to 15
 
+    increment(&rec->height, 5);
 
     std::cout << "after height increment = " << rec->area() << std::endl;
 
@@ -75,14 +78,14 @@ void pointerFunctionRect()
 
     //  TODO (task 11): Add delete statement
 
-
+    delete rec;
 }
 
 
 void smartPointers()
 {
     //  TODO (task 16): Create a SMART! pointer to a Square object
-
+    std::unique_ptr<Square> sqr(new Square());
 
     int i = 10;
 
@@ -91,17 +94,19 @@ void smartPointers()
     //        NOTE! As before, use an arrow -> instead of a period
     //        to access sqr's member variables and functions.
 
+    sqr->set_side_length(i);
 
-    /* uncomment this after step 18
+    //  uncomment this after step 18
     std::cout << "before length increment = " << sqr->area() << std::endl;
-    */
+
 
     //  TODO (task 18): Using the increment function and sqr->sideLength,
     //        increment sqr->sideLength by 5, from 10 to 15
+    increment(&sqr->sideLength, 5);
 
-    /* uncomment this after step 18
+    // uncomment this after step 18
     std::cout << "after length increment = " << sqr->area() << std::endl;
-    */
+
 
 
 
@@ -130,7 +135,7 @@ void twoDimArray()
 
     //  TODO (task 19): Index into the 2D array and
     //        print the value at row r and col c
-
+    std::cout<<j[r][c]<<std::endl;
 }
 
 
@@ -153,7 +158,7 @@ void oneDimArrayAsTwoDimArray()
     //  TODO (task 20): Index into the 1D array as if it was
     //        a 2D array and print the value at
     //        row r and col c
-
+    std::cout<<j[width * r + c]<<std::endl;
 
 }
 
@@ -163,9 +168,9 @@ void inheritanceArray()
     //  TODO (task 21): Create an array of Shapes,
     //                 shapeArray, and fill it with
     //                 both rectangles and squares
+    Shape* shapeArray[3];
 
-
-    /* uncomment this after step 21
+    //     uncomment this after step 21
     Rectangle* a = new Rectangle;
     Square* b = new Square;
     Rectangle* c = new Rectangle;
@@ -173,24 +178,29 @@ void inheritanceArray()
     a->set_values(5, 6);
     b->set_side_length(4);
     c->set_values(2, 5);
-    */
+
 
     //  TODO (task 22): Fill shapeArray with
     //                  a, b, and c
-
+    shapeArray[0] = a;
+    shapeArray[1] = b;
+    shapeArray[2] = c;
 
 
     for(int i = 0; i < 3; i++)
     {
         //  TODO (task 23): print out the area of each shape
         //                  in the array!
+        std::cout<<shapeArray[i]->area()<<std::endl;
     }
 
 
     //  TODO (task 24): Since we used NEW key words
     //                 we must go and delete these
     //                 objects before they go out of scope
-
+    delete a;
+    delete b;
+    delete c;
 }
 
 
@@ -199,7 +209,7 @@ void helloWorld()
 {
     //  TODO (task 1): Write Hello World in a
     //                 standard out call
-
+    std::cout<<"Hello World!!"<<std::endl;
 
 }
 
@@ -212,25 +222,25 @@ int main()
     //           as you fill out each function
 
 
-//    helloWorld();
+    helloWorld();
 
 
-//    pointerFunctionInt();
+    pointerFunctionInt();
 
 
-//    pointerFunctionRect();
+    pointerFunctionRect();
 
 
-//    smartPointers();
+    smartPointers();
 
 
-//    twoDimArray();
+    twoDimArray();
 
 
-//    oneDimArrayAsTwoDimArray();
+    oneDimArrayAsTwoDimArray();
 
 
-//    inheritanceArray();
+    inheritanceArray();
 
 
 
