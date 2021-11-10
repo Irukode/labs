@@ -32,8 +32,15 @@ void main(){
     vec3 CameraSpace_toEye_n = -normalize(CameraSpace_position); // normalized, camera-space vector to eye
     vec3 CameraSpace_normal_n = normalize(CameraSpace_normal);   // normalized, camera-space normal
 
-
     fragColor = color;
     // to do: phong lighting model
-
+    fragColor = fragColor * ambientIntensity;
+    // diffuse color
+    float d = length(CameraSpace_toLight);
+    float attenuation = lightIntensity * min(1/ (attConstant + attLinear * d + attQuadratic * pow(d, 2.f)), 1);
+    float nL = max(0, dot(CameraSpace_normal_n, CameraSpace_toLight_n));
+    fragColor += (color * lightColor * diffuseIntensity * nL) * attenuation;
+    // specular color
+    float rE = max(0, dot(CameraSpace_toEye_n, reflect(-CameraSpace_toLight_n, CameraSpace_normal_n)));
+    fragColor += color * lightColor * specularIntensity * pow(rE, shininess) * attenuation;
 }

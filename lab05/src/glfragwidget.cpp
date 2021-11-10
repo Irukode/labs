@@ -68,19 +68,22 @@ void GLFragWidget::initializeGLFragmentShaders() {
     m_gradientProgramID = ResourceLoader::createShaderProgram(":/shaders/gradient.vert", ":/shaders/gradient.frag");
     m_textureProgramID = ResourceLoader::createShaderProgram(":/shaders/texture.vert", ":/shaders/texture.frag");
 
+
     // Smart pointer!
     m_square = std::make_unique<OpenGLShape>();
 
 
     // TODO: Interleave positions and colors in the array used to intialize m_square (Task 11)
     // TODO: Interleave UV-coordinates along with positions and colors in your VBO (Task 15)
-    std::vector<float> coordinates = {-.5, .5, 0,
-                                       -.5, -.5, 0,
-                                      .5, .5, 0,
-                                      .5, -.5, 0};
+    std::vector<float> coordinates = {-.5, .5, 0, 1.f, 0 , 0,
+                                       -.5, -.5, 0, 1.f, 1.f, 0,
+                                      .5, .5, 0, 0, 1.f, 0,
+                                      .5, -.5, 0, 0, 0, 1.f};
     // TODO: update the stride (last argument to setVertexData) when adding info to square (Task 11 & 15)
-    m_square->setVertexData(&coordinates[0], coordinates.size(), VBO::GEOMETRY_LAYOUT::LAYOUT_TRIANGLE_STRIP, coordinates.size() / 3);
+    m_square->setVertexData(&coordinates[0], coordinates.size(), VBO::GEOMETRY_LAYOUT::LAYOUT_TRIANGLE_STRIP, coordinates.size() / 6);
     m_square->setAttribute(ShaderAttrib::POSITION, 3, 0, VBOAttribMarker::DATA_TYPE::FLOAT, false);
+    m_square->setAttribute(ShaderAttrib::COLOR, 3, 12, VBOAttribMarker::DATA_TYPE::FLOAT, false);
+
 
     // TODO: Don't forget to add the color attribute similar to how you do for the position above (Task 11)
 
@@ -94,20 +97,26 @@ void GLFragWidget::initializeGLFragmentShaders() {
 void GLFragWidget::paintGLFragmentShaders() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
     switch (settings.shaderProgram) {
-        case SOLID_SHADER_PROGRAM:
+        case SOLID_SHADER_PROGRAM:{
             // TODO: Use m_solidProgramID as the program. (Task 9)
+            glUseProgram(m_solidProgramID);
 
             // TODO: Set the uniform's value to a color other than white. (Task 10)
-
+            GLint uniformLoc = glGetUniformLocation(m_solidProgramID, "color");
+            glUniform3f(uniformLoc, 255, 255, 0);
             // TODO: Draw the square, and then unbind the program. (Task 9)
-
-            break;
+            m_square->draw();
+            glUseProgram(0);
+        break;
+        }
         case GRADIENT_SHADER_PROGRAM:
             // TODO: Draw the square using m_gradientProgramID. (Task 13)
-
+            glUseProgram(m_gradientProgramID);
             // TODO: Draw the square, and then unbind the program. (Task 13)
-
+            m_square->draw();
+            glUseProgram(0);
             break;
         case TEXTURE_SHADER_PROGRAM:
             // TODO: Use m_textureProgramID. (Task 16)
