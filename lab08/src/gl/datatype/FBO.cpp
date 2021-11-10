@@ -94,7 +94,7 @@ void FBO::bind() {
 
 void FBO::unbind() {
     // TODO [Task 3]
-    glBindFramebuffer(0, m_handle);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 const Texture2D& FBO::getColorAttachment(int i) const {
